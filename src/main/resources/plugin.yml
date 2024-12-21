@@ -1,0 +1,14 @@
+name: $name
+description: $description
+authors:
+  - sylviameows
+version: $version
+
+main: net.sylviameows.tentorium.TentoriumCore
+api-version: $apiVersion
+prefix: "Tentorium"
+
+permissions:
+  tentorium.bypass:
+    description: "allows players to run the bypass command and disable spawn protections."
+    default: op

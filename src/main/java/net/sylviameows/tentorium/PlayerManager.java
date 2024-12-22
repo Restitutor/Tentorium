@@ -1,5 +1,6 @@
 package net.sylviameows.tentorium;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,6 +16,9 @@ public class PlayerManager implements Listener {
     public void playerJoin(PlayerJoinEvent event) {
         var player = event.getPlayer();
         players.put(player, new TentoriumPlayer(player));
+
+        // create database entry for player
+        TentoriumCore.database().createPlayer(player);
     }
 
     @EventHandler

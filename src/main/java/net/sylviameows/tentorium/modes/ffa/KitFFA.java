@@ -191,6 +191,10 @@ public class KitFFA extends FFA {
     protected void rewardKiller(Player killer) {
         super.rewardKiller(killer);
         killer.getInventory().addItem(ItemUtilities.createItem(Material.GOLDEN_APPLE));
+
+        var uuid = killer.getUniqueId().toString();
+        var score = database().fetchInt(uuid, "ffa_kills");
+        database().update(uuid, "ffa_kills", score+1);
     }
 
     @Override @EventHandler

@@ -1,6 +1,8 @@
 package net.sylviameows.tentorium.modes;
 
 import net.sylviameows.tentorium.PlayerManager;
+import net.sylviameows.tentorium.TentoriumCore;
+import net.sylviameows.tentorium.database.SQLite;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,6 +12,9 @@ import java.util.ArrayList;
 
 public abstract class Mode implements Listener {
     protected final ArrayList<Player> players = new ArrayList<>();
+    protected SQLite database() {
+        return TentoriumCore.database();
+    }
 
     public abstract String id();
 

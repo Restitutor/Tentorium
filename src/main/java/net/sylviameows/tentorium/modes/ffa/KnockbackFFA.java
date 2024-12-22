@@ -80,4 +80,12 @@ public class KnockbackFFA extends FFA {
         }
     }
 
+    @Override
+    protected void rewardKiller(Player killer) {
+        super.rewardKiller(killer);
+
+        var uuid = killer.getUniqueId().toString();
+        var score = database().fetchInt(uuid, "kb_kills");
+        database().update(uuid, "kb_kills", score+1);
+    }
 }

@@ -13,6 +13,7 @@ import net.sylviameows.tentorium.utilities.Area;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 
@@ -127,5 +128,12 @@ public class TNTSpleef extends Spleef {
         if (!players.contains(event.getPlayer())) return;
 
         event.setCancelled(true);
+    }
+
+    @Override
+    protected void winner(Player player) {
+        var uuid = player.getUniqueId().toString();
+        var score = database().fetchInt(uuid, "tnt_wins");
+        database().update(uuid, "tnt_wins", score+1);
     }
 }

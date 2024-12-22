@@ -97,6 +97,9 @@ public class TentoriumCore extends JavaPlugin {
 
             commands.register("select", "select a map", new SelectCommand());
 
+            // debug!
+            commands.register("stats", "view stats for each game", new StatsCommand());
+
             for (Mode mode : modes) {
                 commands.register(mode.id(), new ModeAlias(mode.id()));
             }

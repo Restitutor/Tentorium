@@ -86,4 +86,11 @@ public class ClassicSpleef extends Spleef {
             event.setCancelled(true);
         }
     }
+
+    @Override
+    protected void winner(Player player) {
+        var uuid = player.getUniqueId().toString();
+        var score = database().fetchInt(uuid, "spleef_wins");
+        database().update(uuid, "spleef_wins", score+1);
+    }
 }

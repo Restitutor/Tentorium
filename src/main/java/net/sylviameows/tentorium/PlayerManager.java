@@ -19,6 +19,7 @@ public class PlayerManager implements Listener {
 
         // create database entry for player
         TentoriumCore.database().createPlayer(player);
+        TentoriumCore.database().update(player.getUniqueId().toString(), "name", player.getName());
     }
 
     @EventHandler

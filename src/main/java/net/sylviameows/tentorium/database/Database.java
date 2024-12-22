@@ -69,13 +69,11 @@ public abstract class Database {
         PreparedStatement ps = null;
         try {
             conn = getSQLConnection();
-            ps = conn.prepareStatement("UPDATE "+table+" SET ? = ? WHERE uuid = ?");
-
-            ps.setString(3, uuid);
-
-            ps.setString(1, column);
+            ps = conn.prepareStatement("UPDATE %s SET %s = ? WHERE uuid = ?".formatted(table, column));
 
             consumer.accept(ps);
+
+            ps.setString(2, uuid);
 
             ps.executeUpdate();
             return;
@@ -96,7 +94,7 @@ public abstract class Database {
     public void update(String uuid, String column, String value) {
         update(uuid, column, statement -> {
             try {
-                statement.setString(2, value);
+                statement.setString(1, value);
             } catch (SQLException ex) {
                 core.getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(), ex);
             }
@@ -106,7 +104,7 @@ public abstract class Database {
     public void update(String uuid, String column, Integer value) {
         update(uuid, column, statement -> {
             try {
-                statement.setInt(2, value);
+                statement.setInt(1, value);
             } catch (SQLException ex) {
                 core.getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(), ex);
             }

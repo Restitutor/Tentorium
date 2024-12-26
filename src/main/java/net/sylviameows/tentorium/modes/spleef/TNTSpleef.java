@@ -8,8 +8,11 @@ import com.sk89q.worldedit.function.mask.Mask;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.block.BlockType;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.sylviameows.tentorium.TentoriumCore;
 import net.sylviameows.tentorium.utilities.Area;
+import net.sylviameows.tentorium.utilities.Palette;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -67,6 +70,11 @@ public class TNTSpleef extends Spleef {
                 }
             }
         });
+    }
+
+    @Override
+    public Component name() {
+        return MiniMessage.miniMessage().deserialize("<rainbow>Rainbow Rumble</rainbow>");
     }
 
     @Override
@@ -135,5 +143,10 @@ public class TNTSpleef extends Spleef {
         var uuid = player.getUniqueId().toString();
         var score = database().fetchInt(uuid, "tnt_wins");
         database().update(uuid, "tnt_wins", score+1);
+    }
+
+    @Override
+    public String leaderboardStatId() {
+        return "tnt_wins";
     }
 }

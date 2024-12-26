@@ -37,6 +37,39 @@ public abstract class Database {
         }
     }
 
+
+    /**
+     * blanket execute command.
+     * @param statement use {{table}} to replace with the table
+     * @param consumer what to do with each result.
+     */
+    public void executeQuery(String statement, Consumer<ResultSet> consumer) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = getSQLConnection();
+
+            var parsed = statement.replace("{{table}}", table);
+            ps = conn.prepareStatement(parsed);
+
+            var rs = ps.executeQuery();
+            while(rs.next()) {
+                consumer.accept(rs);
+            }
+        } catch (SQLException ex) {
+            core.getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(), ex);
+        } finally {
+            try {
+                if (ps != null)
+                    ps.close();
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException ex) {
+                core.getLogger().log(Level.SEVERE, Errors.sqlConnectionClose(), ex);
+            }
+        }
+    }
+
     protected void fetch(String uuid, Consumer<ResultSet> consumer) {
         Connection conn = null;
         PreparedStatement ps = null;

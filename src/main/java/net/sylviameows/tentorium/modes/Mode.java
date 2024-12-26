@@ -1,8 +1,11 @@
 package net.sylviameows.tentorium.modes;
 
+import net.kyori.adventure.text.Component;
 import net.sylviameows.tentorium.PlayerManager;
 import net.sylviameows.tentorium.TentoriumCore;
 import net.sylviameows.tentorium.database.SQLite;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,6 +17,11 @@ public abstract class Mode implements Listener {
     protected final ArrayList<Player> players = new ArrayList<>();
     protected SQLite database() {
         return TentoriumCore.database();
+    }
+
+    public Component name() {
+        String name = StringUtils.capitalize(id());
+        return Component.text(name);
     }
 
     public abstract String id();
@@ -35,4 +43,6 @@ public abstract class Mode implements Listener {
             event.setCancelled(true);
         }
     }
+
+
 }

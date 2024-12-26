@@ -14,7 +14,7 @@ public class SQLite extends Database {
     String dbname;
     public SQLite(TentoriumCore core){
         super(core);
-        dbname = "tentorium";
+        dbname = "scores";
     }
 
     public String CREATE_TABLE_STRING =

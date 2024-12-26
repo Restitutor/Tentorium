@@ -51,6 +51,11 @@ public class KitFFA extends FFA {
         return SPAWN_AREA;
     }
 
+    @Override
+    public Component name() {
+        return Component.text("Free For All").color(Palette.LIME);
+    }
+
     public KitFFA() {
         Kit[] kits = {
                 new KnightKit(),
@@ -216,5 +221,10 @@ public class KitFFA extends FFA {
         } catch (Exception ignored) {
 
         }
+    }
+
+    @Override
+    public String leaderboardStatId() {
+        return "ffa_kills";
     }
 }

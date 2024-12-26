@@ -7,6 +7,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.title.Title;
 import net.sylviameows.tentorium.TentoriumCore;
+import net.sylviameows.tentorium.modes.TrackedScore;
 import net.sylviameows.tentorium.modes.Mode;
 import net.sylviameows.tentorium.utilities.Area;
 import net.sylviameows.tentorium.utilities.Palette;
@@ -22,7 +23,7 @@ import org.bukkit.util.Vector;
 import java.time.Duration;
 import java.util.ArrayList;
 
-public abstract class Spleef extends Mode {
+public abstract class Spleef extends Mode implements TrackedScore {
     abstract protected Location spawn();
     abstract protected Area lobby();
     abstract protected int voidLevel();
@@ -162,4 +163,9 @@ public abstract class Spleef extends Mode {
      * Reset the map.
      */
     abstract protected void refresh();
+
+    @Override
+    public String leaderboardStatName() {
+        return "wins";
+    }
 }

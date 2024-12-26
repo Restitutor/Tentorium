@@ -8,8 +8,10 @@ import com.sk89q.worldedit.function.mask.Mask;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.block.BlockType;
+import net.kyori.adventure.text.Component;
 import net.sylviameows.tentorium.utilities.Area;
 import net.sylviameows.tentorium.utilities.ItemUtilities;
+import net.sylviameows.tentorium.utilities.Palette;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,6 +27,11 @@ public class ClassicSpleef extends Spleef {
             new Location(Bukkit.getWorld("world"), -331, 69, -115)
     );
     private final int VOID_LEVEL = 20;
+
+    @Override
+    public Component name() {
+        return super.name().color(Palette.AQUA);
+    }
 
     @Override
     public String id() {
@@ -92,5 +99,10 @@ public class ClassicSpleef extends Spleef {
         var uuid = player.getUniqueId().toString();
         var score = database().fetchInt(uuid, "spleef_wins");
         database().update(uuid, "spleef_wins", score+1);
+    }
+
+    @Override
+    public String leaderboardStatId() {
+        return "spleef_wins";
     }
 }

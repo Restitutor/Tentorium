@@ -1,6 +1,8 @@
 package net.sylviameows.tentorium.modes.ffa;
 
+import net.kyori.adventure.text.Component;
 import net.sylviameows.tentorium.utilities.Area;
+import net.sylviameows.tentorium.utilities.Palette;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -33,6 +35,11 @@ public class KnockbackFFA extends FFA {
         player.teleportAsync(SPAWN_LOCATION);
         player.clearActivePotionEffects();
 //        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 4 * 20, 0, true, false, true));
+    }
+
+    @Override
+    public Component name() {
+        return Component.text("Knockback").color(Palette.PURPLE_LIGHT);
     }
 
     @Override
@@ -87,5 +94,10 @@ public class KnockbackFFA extends FFA {
         var uuid = killer.getUniqueId().toString();
         var score = database().fetchInt(uuid, "kb_kills");
         database().update(uuid, "kb_kills", score+1);
+    }
+
+    @Override
+    public String leaderboardStatId() {
+        return "kb_kills";
     }
 }

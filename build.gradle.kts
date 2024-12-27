@@ -5,7 +5,7 @@ plugins {
 
 group = "net.sylviameows"
 description = "tentorium plugin"
-version = "0.5b"
+version = "0.6a"
 
 repositories {
     mavenCentral()

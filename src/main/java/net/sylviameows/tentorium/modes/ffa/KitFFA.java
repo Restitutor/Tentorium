@@ -51,6 +51,11 @@ public class KitFFA extends FFA {
         return SPAWN_AREA;
     }
 
+    @Override
+    public Component name() {
+        return Component.text("Free For All").color(Palette.LIME);
+    }
+
     public KitFFA() {
         Kit[] kits = {
                 new KnightKit(),
@@ -191,6 +196,10 @@ public class KitFFA extends FFA {
     protected void rewardKiller(Player killer) {
         super.rewardKiller(killer);
         killer.getInventory().addItem(ItemUtilities.createItem(Material.GOLDEN_APPLE));
+
+        var uuid = killer.getUniqueId().toString();
+        var score = database().fetchInt(uuid, "ffa_kills");
+        database().update(uuid, "ffa_kills", score+1);
     }
 
     @Override @EventHandler
@@ -212,5 +221,10 @@ public class KitFFA extends FFA {
         } catch (Exception ignored) {
 
         }
+    }
+
+    @Override
+    public String leaderboardStatId() {
+        return "ffa_kills";
     }
 }

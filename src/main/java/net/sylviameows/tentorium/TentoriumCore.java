@@ -4,6 +4,7 @@ import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.sylviameows.tentorium.commands.*;
+import net.sylviameows.tentorium.database.SQLite;
 import net.sylviameows.tentorium.modes.Mode;
 import net.sylviameows.tentorium.modes.Parkour;
 import net.sylviameows.tentorium.modes.ffa.KitFFA;
@@ -35,10 +36,20 @@ public class TentoriumCore extends JavaPlugin {
 
     public static HashMap<String, Mode> modes = new HashMap<>();
 
+    private static SQLite DATABASE;
+
+    public static SQLite database() {
+        return DATABASE;
+    }
+
     @Override
     public void onEnable() {
         TentoriumCore.INSTANCE = this;
         TentoriumCore.LOGGER = getComponentLogger();
+
+        logger().info("Connecting to database...");
+        DATABASE = new SQLite(this);
+        DATABASE.load();
 
         logger().info("Registering events...");
         Listener[] events = {
@@ -85,6 +96,9 @@ public class TentoriumCore extends JavaPlugin {
             commands.register("bypass", "bypass spawn protections", new BypassCommand());
 
             commands.register("select", "select a map", new SelectCommand());
+
+            commands.register("leaderboard", "view leaderboards for each game", new LeaderboardCommand());
+            commands.register("stats", "view stats for each game", new StatsCommand());
 
             for (Mode mode : modes) {
                 commands.register(mode.id(), new ModeAlias(mode.id()));

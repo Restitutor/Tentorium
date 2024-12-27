@@ -6,6 +6,7 @@ import net.kyori.adventure.text.Component;
 import net.sylviameows.tentorium.PlayerManager;
 import net.sylviameows.tentorium.TentoriumCore;
 import net.sylviameows.tentorium.modes.Bypass;
+import net.sylviameows.tentorium.modes.TrackedScore;
 import net.sylviameows.tentorium.utilities.Palette;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -23,10 +24,14 @@ public class StatsCommand implements BasicCommand {
             var uuid = player.getUniqueId().toString();
 
             player.sendMessage(Component.text("Game Stats:").color(Palette.LIME));
-            player.sendMessage(Component.text("FFA - "+db.fetchInt(uuid, "ffa_kills")+ "kills"));
-            player.sendMessage(Component.text("Knockback - "+db.fetchInt(uuid, "kb_kills")+ "kills"));
-            player.sendMessage(Component.text("Spleef - "+db.fetchInt(uuid, "spleef_wins")+ "wins"));
-            player.sendMessage(Component.text("TNT Run - "+db.fetchInt(uuid, "tnt_wins")+ "wins"));
+            TentoriumCore.modes.forEach((id, mode) -> {
+                if (mode instanceof TrackedScore ts) {
+                    player.sendMessage(Component.text(": ").color(Palette.GRAY).append(mode.name())
+                            .append(Component.text(" - ").color(Palette.GRAY))
+                            .append(Component.text(db.fetchInt(uuid, ts.leaderboardStatId())+ " "+ts.leaderboardStatName()).color(Palette.WHITE))
+                    );
+                }
+            });
         }
     }
 }

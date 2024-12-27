@@ -25,7 +25,6 @@ public class LeaderboardCommand implements BasicCommand {
 
         if (args.length < 1) {
             target.sendMessage("Provide a mode argument to view a leaderboard.");
-
         } else {
             String mode_name = args[0];
             Mode mode = TentoriumCore.modes.get(mode_name);
@@ -46,7 +45,9 @@ public class LeaderboardCommand implements BasicCommand {
                     if (lp == null) return;
                     reference.getAndUpdate(component -> component.appendNewline());
 
-                    var line = Component.text(place+". "+lp.name()).color(Palette.WHITE).append(Component.text(" - "+lp.score()+" "+tracked.leaderboardStatName()).color(Palette.GRAY));
+                    var line = Component.text(place+". "+lp.name()).color(Palette.WHITE)
+                            .append(Component.text(" - ").color(Palette.GRAY))
+                            .append(Component.text(lp.score()+" "+tracked.leaderboardStatName()).color(Palette.WHITE));
                     reference.getAndUpdate(component -> component.append(line));
                 });
 
@@ -63,7 +64,8 @@ public class LeaderboardCommand implements BasicCommand {
     public Collection<String> suggest(@NotNull CommandSourceStack source, String @NotNull [] args) {
         if (args.length <= 1) {
             Collection<String> suggestions = new ArrayList<>();
-            TentoriumCore.modes.forEach((id,_mode) -> {
+            TentoriumCore.modes.forEach((id,mode) -> {
+                if (!(mode instanceof TrackedScore)) return;
                 suggestions.add(id);
             });
 

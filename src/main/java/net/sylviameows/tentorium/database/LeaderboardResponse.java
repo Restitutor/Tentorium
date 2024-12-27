@@ -17,7 +17,7 @@ public class LeaderboardResponse {
      * Does nothing special at the moment.
      */
     public LeaderboardResponse(String stat, Player player) {
-        // fixme: target = player; 
+        // fixme: target = player;
         execute(stat);
     }
 
@@ -45,6 +45,7 @@ public class LeaderboardResponse {
 
         this.top_5 = top_5;
 
+        // fixme: this statement doesnt work to get the targets place.
         if (target != null) {
             db.executeQuery("SELECT * FROM {{table}} ORDER BY "+stat+" DESC WHERE uuid = '"+ target.getUniqueId() +"';", result -> {
                 try {

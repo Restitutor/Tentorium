@@ -1,12 +1,19 @@
 package net.sylviameows.tentorium.utilities;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
-public class Area {
+public class Area implements ConfigurationSerializable {
     private Location a;
     private Location b;
 
@@ -69,5 +76,31 @@ public class Area {
     }
     public void b(Location location) {
         this.b = location;
+    }
+
+    public World world() { return a.getWorld(); }
+    public void world(World world) {
+        a.setWorld(world);
+        b.setWorld(world);
+    }
+
+    @Override
+    public @NotNull Map<String, Object> serialize() {
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("a", new int[]{a.getBlockX(), a.getBlockY(), a.getBlockZ()});
+        data.put("b", new int[]{b.getBlockX(), b.getBlockY(), b.getBlockZ()});
+
+        return data;
+    }
+
+    public static Area deserialize(Map<String, Object> args) {
+        List<Integer> a = (List<Integer>) args.get("a");
+        List<Integer> b = (List<Integer>) args.get("b");
+
+        var location_a = new Location(Bukkit.getWorld("world"), a.get(0), a.get(1), a.get(2));
+        var location_b = new Location(Bukkit.getWorld("world"), b.get(0), b.get(1), b.get(2));
+
+        return new Area(location_a, location_b);
     }
 }

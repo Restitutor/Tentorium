@@ -4,6 +4,7 @@ import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.sylviameows.tentorium.commands.*;
+import net.sylviameows.tentorium.config.Config;
 import net.sylviameows.tentorium.database.SQLite;
 import net.sylviameows.tentorium.modes.Mode;
 import net.sylviameows.tentorium.modes.Parkour;
@@ -22,6 +23,7 @@ import java.util.List;
 public class TentoriumCore extends JavaPlugin {
     private static ComponentLogger LOGGER;
     private static TentoriumCore INSTANCE;
+    private static Config CONFIG;
 
     public static ComponentLogger logger() {
         return LOGGER;
@@ -104,6 +106,8 @@ public class TentoriumCore extends JavaPlugin {
                 commands.register(mode.id(), new ModeAlias(mode.id()));
             }
         });
+
+        CONFIG = new Config(this);
 
         logger().info("Plugin ready for use!");
     }

@@ -9,6 +9,9 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.block.BlockType;
 import net.kyori.adventure.text.Component;
+import net.sylviameows.tentorium.config.Config;
+import net.sylviameows.tentorium.config.serializable.ModeConfig;
+import net.sylviameows.tentorium.config.serializable.SpleefConfig;
 import net.sylviameows.tentorium.utilities.Area;
 import net.sylviameows.tentorium.utilities.ItemUtilities;
 import net.sylviameows.tentorium.utilities.Palette;
@@ -21,13 +24,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 
 public class ClassicSpleef extends Spleef {
-    private final Location SPAWN_LOCATION = new Location(Bukkit.getWorld("world"), -327.5, 64, -118.5, -90, 0);
-    private final Area SPAWN_AREA = new Area(
-            new Location(Bukkit.getWorld("world"), -322, 63, -123),
-            new Location(Bukkit.getWorld("world"), -331, 69, -115)
-    );
-    private final int VOID_LEVEL = 20;
-
     @Override
     public Component name() {
         return super.name().color(Palette.AQUA);
@@ -36,21 +32,6 @@ public class ClassicSpleef extends Spleef {
     @Override
     public String id() {
         return "spleef";
-    }
-
-    @Override
-    protected Location spawn() {
-        return SPAWN_LOCATION;
-    }
-
-    @Override
-    protected Area lobby() {
-        return SPAWN_AREA;
-    }
-
-    @Override
-    protected int voidLevel() {
-        return VOID_LEVEL;
     }
 
     @Override
@@ -104,5 +85,13 @@ public class ClassicSpleef extends Spleef {
     @Override
     public String leaderboardStatId() {
         return "spleef_wins";
+    }
+
+    @Override
+    public ModeConfig options() {
+        if (options != null) return options;
+        var options = Config.get().getSerializable("spleef", SpleefConfig.class);
+        this.options = options;
+        return options;
     }
 }

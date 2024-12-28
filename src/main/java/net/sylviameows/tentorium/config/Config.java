@@ -13,7 +13,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
 public class Config {
     public final TentoriumCore core;
-    public final FileConfiguration config;
+    private static FileConfiguration config;
 
     public Config(TentoriumCore core) {
         this.core = core;
@@ -28,6 +28,16 @@ public class Config {
         ConfigurationSerialization.registerClass(TNTFloors.class, "tnt_floors");
 
         core.saveResource("config.yml", false);
-        config = core.getConfig();
+        Config.config = core.getConfig();
     }
+
+    public static FileConfiguration get() {
+        return config;
+    }
+
+    public static void save() {
+        TentoriumCore.instance().saveConfig();
+    }
+
+
 }

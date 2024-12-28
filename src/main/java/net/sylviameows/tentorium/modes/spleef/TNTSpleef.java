@@ -11,6 +11,9 @@ import com.sk89q.worldedit.world.block.BlockType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.sylviameows.tentorium.TentoriumCore;
+import net.sylviameows.tentorium.config.Config;
+import net.sylviameows.tentorium.config.serializable.ModeConfig;
+import net.sylviameows.tentorium.config.serializable.SpleefConfig;
 import net.sylviameows.tentorium.utilities.Area;
 import net.sylviameows.tentorium.utilities.Palette;
 import org.bukkit.Bukkit;
@@ -83,18 +86,11 @@ public class TNTSpleef extends Spleef {
     }
 
     @Override
-    protected Location spawn() {
-        return SPAWN_LOCATION;
-    }
-
-    @Override
-    protected Area lobby() {
-        return SPAWN_AREA;
-    }
-
-    @Override
-    protected int voidLevel() {
-        return VOID_LEVEL;
+    public ModeConfig options() {
+        if (options != null) return options;
+        var options = Config.get().getSerializable("tntrun", SpleefConfig.class);
+        this.options = options;
+        return options;
     }
 
     @Override

@@ -4,6 +4,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.sylviameows.tentorium.PlayerManager;
 import net.sylviameows.tentorium.TentoriumCore;
+import net.sylviameows.tentorium.config.Config;
+import net.sylviameows.tentorium.config.serializable.ModeConfig;
 import net.sylviameows.tentorium.gui.ffa.KitSelectionGUI;
 import net.sylviameows.tentorium.modes.ffa.kits.ArcherKit;
 import net.sylviameows.tentorium.modes.ffa.kits.Kit;
@@ -33,12 +35,6 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class KitFFA extends FFA {
-    private final Location SPAWN_LOCATION = new Location(Bukkit.getWorld("world"), 169.5, 88, -387.5, 0, 0);
-    private final Area SPAWN_AREA = new Area(
-            new Location(Bukkit.getWorld("world"), 159, 85, -372),
-            new Location(Bukkit.getWorld("world"), 180, 132, -393)
-    );
-
     private static final HashMap<String, Kit> kits = new HashMap<>();
     private final ArrayList<Location> player_placed_blocks = new ArrayList<>();
 
@@ -47,8 +43,12 @@ public class KitFFA extends FFA {
     public static HashMap<String, Kit> kits() {
         return kits;
     }
+
+    public Location spawn() {
+        return getOptions().location();
+    }
     public Area lobby() {
-        return SPAWN_AREA;
+        return getOptions().region();
     }
 
     @Override
@@ -69,6 +69,14 @@ public class KitFFA extends FFA {
     }
 
     @Override
+    public ModeConfig getOptions() {
+        if (options != null) return options;
+        var options = Config.get().getSerializable("ffa", ModeConfig.class);
+        this.options = options;
+        return options;
+    }
+
+    @Override
     public void join(Player player) {
         super.join(player);
         respawn(player);
@@ -85,7 +93,7 @@ public class KitFFA extends FFA {
     protected void respawn(Player player) {
         super.respawn(player);
 
-        var tp = player.teleportAsync(SPAWN_LOCATION);
+        var tp = player.teleportAsync(spawn());
         tp.whenComplete((result, ex) -> fighting.remove(player));
 
         player.clearActivePotionEffects();
@@ -132,9 +140,9 @@ public class KitFFA extends FFA {
         if (event.getEntity() instanceof Player player && players.contains(player)) {
             if (event.getCause() == EntityDamageEvent.DamageCause.FALL) event.setCancelled(true);
 
-            if (SPAWN_AREA.contains(player.getLocation())) event.setCancelled(true);
+            if (lobby().contains(player.getLocation())) event.setCancelled(true);
             var source_entity = event.getDamageSource().getCausingEntity();
-            if (source_entity != null && SPAWN_AREA.contains(source_entity.getLocation())) event.setCancelled(true);
+            if (source_entity != null && lobby().contains(source_entity.getLocation())) event.setCancelled(true);
         }
     }
 
@@ -143,7 +151,7 @@ public class KitFFA extends FFA {
         if (!players.contains(event.getPlayer())) return;
 
         var location = event.getBlock().getLocation();
-        if (SPAWN_AREA.contains(location)) {
+        if (lobby().contains(location)) {
             event.setCancelled(true);
             return;
         }
@@ -210,7 +218,7 @@ public class KitFFA extends FFA {
         if (!players.contains(player)) return;
 
         if (fighting.contains(player)) return;
-        if (SPAWN_AREA.contains(player.getLocation())) return;
+        if (lobby().contains(player.getLocation())) return;
 
         fighting.add(player);
 

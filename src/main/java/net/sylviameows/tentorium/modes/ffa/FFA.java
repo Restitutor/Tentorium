@@ -3,8 +3,13 @@ package net.sylviameows.tentorium.modes.ffa;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.sylviameows.tentorium.config.serializable.ModeConfig;
+import net.sylviameows.tentorium.config.serializable.SpleefConfig;
+import net.sylviameows.tentorium.modes.ConfigurableMode;
 import net.sylviameows.tentorium.modes.TrackedScore;
 import net.sylviameows.tentorium.modes.Mode;
+import net.sylviameows.tentorium.utilities.Area;
+import org.bukkit.Location;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Player;
@@ -13,9 +18,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public abstract class FFA extends Mode implements TrackedScore {
-    protected int voidLevel() {
-        return 30;
+public abstract class FFA extends Mode implements TrackedScore, ConfigurableMode {
+    protected ModeConfig options;
+    public void reload() {
+        options = null;
     }
 
     @EventHandler

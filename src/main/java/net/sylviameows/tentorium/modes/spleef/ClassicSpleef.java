@@ -9,6 +9,10 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.world.block.BlockType;
 import net.kyori.adventure.text.Component;
+import net.sylviameows.tentorium.config.Config;
+import net.sylviameows.tentorium.config.serializable.ModeConfig;
+import net.sylviameows.tentorium.config.serializable.SpleefConfig;
+import net.sylviameows.tentorium.config.serializable.spleef.ClassicFloors;
 import net.sylviameows.tentorium.utilities.Area;
 import net.sylviameows.tentorium.utilities.ItemUtilities;
 import net.sylviameows.tentorium.utilities.Palette;
@@ -20,14 +24,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 
-public class ClassicSpleef extends Spleef {
-    private final Location SPAWN_LOCATION = new Location(Bukkit.getWorld("world"), -327.5, 64, -118.5, -90, 0);
-    private final Area SPAWN_AREA = new Area(
-            new Location(Bukkit.getWorld("world"), -322, 63, -123),
-            new Location(Bukkit.getWorld("world"), -331, 69, -115)
-    );
-    private final int VOID_LEVEL = 20;
+import java.util.ArrayList;
+import java.util.List;
 
+public class ClassicSpleef extends Spleef {
     @Override
     public Component name() {
         return super.name().color(Palette.AQUA);
@@ -36,21 +36,6 @@ public class ClassicSpleef extends Spleef {
     @Override
     public String id() {
         return "spleef";
-    }
-
-    @Override
-    protected Location spawn() {
-        return SPAWN_LOCATION;
-    }
-
-    @Override
-    protected Area lobby() {
-        return SPAWN_AREA;
-    }
-
-    @Override
-    protected int voidLevel() {
-        return VOID_LEVEL;
     }
 
     @Override
@@ -64,16 +49,18 @@ public class ClassicSpleef extends Spleef {
     protected void refresh() {
         var world = BukkitAdapter.adapt(Bukkit.getWorld("world"));
         try (EditSession session = WorldEdit.getInstance().newEditSessionBuilder().world(world).limitUnlimited().build()) {
-            int layers = 6;
-            int gap = 3;
+            var floors = getOptions().floors();
 
-            int y = 60;
+            int layers = ((ClassicFloors) floors).layers();
+            int gap = floors.gap();
+
+            int y = floors.y();
 
             Mask mask = new BlockMaskBuilder().add(BlockType.REGISTRY.get("minecraft:air")).build(session);
             for (int i = 0; i < layers; i++) {
                 var region = new CuboidRegion(
-                        BlockVector3.at(-322, y, -107),
-                        BlockVector3.at(-298, y, -131)
+                        BlockVector3.at(floors.x1(), y, floors.z1()),
+                        BlockVector3.at(floors.x2(), y, floors.z2())
                 );
 
                 session.replaceBlocks(region, mask, BlockType.REGISTRY.get("minecraft:snow_block"));
@@ -104,5 +91,13 @@ public class ClassicSpleef extends Spleef {
     @Override
     public String leaderboardStatId() {
         return "spleef_wins";
+    }
+
+    @Override
+    public SpleefConfig getOptions() {
+        if (options != null) return options;
+        var options = Config.get().getSerializable("spleef", SpleefConfig.class);
+        this.options = options;
+        return options;
     }
 }

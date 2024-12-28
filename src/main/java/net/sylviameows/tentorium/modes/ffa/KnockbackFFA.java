@@ -1,6 +1,8 @@
 package net.sylviameows.tentorium.modes.ffa;
 
 import net.kyori.adventure.text.Component;
+import net.sylviameows.tentorium.config.Config;
+import net.sylviameows.tentorium.config.serializable.ModeConfig;
 import net.sylviameows.tentorium.utilities.Area;
 import net.sylviameows.tentorium.utilities.Palette;
 import org.bukkit.Bukkit;
@@ -18,21 +20,10 @@ public class KnockbackFFA extends FFA {
     private final Material WEAPON_MATERIAL = Material.STICK;
 
     @Override
-    protected int voidLevel() {
-        return 54;
-    }
-
-    private final Location SPAWN_LOCATION = new Location(Bukkit.getWorld("world"), 20.5, 114, -580.5, 0, 0);
-    private final Area SPAWN_AREA = new Area(
-            new Location(Bukkit.getWorld("world"), 24, 110, -533),
-            new Location(Bukkit.getWorld("world"), 16, 120, -587)
-    );
-
-    @Override
     protected void respawn(Player player) {
         super.respawn(player);
 
-        player.teleportAsync(SPAWN_LOCATION);
+        player.teleportAsync(spawn());
         player.clearActivePotionEffects();
 //        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 4 * 20, 0, true, false, true));
     }
@@ -45,6 +36,14 @@ public class KnockbackFFA extends FFA {
     @Override
     public String id() {
         return "knockback";
+    }
+
+    @Override
+    public ModeConfig getOptions() {
+        if (options != null) return options;
+        var options = Config.get().getSerializable("knockback", ModeConfig.class);
+        this.options = options;
+        return options;
     }
 
     @Override
@@ -73,7 +72,7 @@ public class KnockbackFFA extends FFA {
     @EventHandler
     public void damage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player player && players.contains(player)) {
-            if (SPAWN_AREA.contains(player.getLocation()) || event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+            if (lobby().contains(player.getLocation()) || event.getCause() == EntityDamageEvent.DamageCause.FALL) {
                 event.setCancelled(true);
                 return;
             }

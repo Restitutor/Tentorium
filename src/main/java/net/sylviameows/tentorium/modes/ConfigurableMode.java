@@ -5,15 +5,15 @@ import net.sylviameows.tentorium.utilities.Area;
 import org.bukkit.Location;
 
 public interface ConfigurableMode {
-    ModeConfig options();
+    ModeConfig getOptions();
     default Location spawn() {
-        return options().location();
+        return getOptions().location();
     }
     default Area lobby() {
-        return options().region();
+        return getOptions().region();
     }
     default int voidLevel() {
-        return options().voidLevel();
+        return getOptions().voidLevel();
     }
 
     void reload();

@@ -17,6 +17,10 @@ public class ClassicFloors extends FloorsConfig {
         this.layers = (int) args.get("layer_count");
     }
 
+    public int layers() {
+        return layers;
+    }
+
     @Override
     protected Map<String, Object> addLayers(Map<String, Object> start) {
         start.put("layer_count", layers);

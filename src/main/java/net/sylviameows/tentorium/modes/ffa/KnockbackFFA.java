@@ -39,7 +39,7 @@ public class KnockbackFFA extends FFA {
     }
 
     @Override
-    public ModeConfig options() {
+    public ModeConfig getOptions() {
         if (options != null) return options;
         var options = Config.get().getSerializable("knockback", ModeConfig.class);
         this.options = options;

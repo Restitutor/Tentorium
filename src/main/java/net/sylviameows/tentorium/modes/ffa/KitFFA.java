@@ -6,7 +6,6 @@ import net.sylviameows.tentorium.PlayerManager;
 import net.sylviameows.tentorium.TentoriumCore;
 import net.sylviameows.tentorium.config.Config;
 import net.sylviameows.tentorium.config.serializable.ModeConfig;
-import net.sylviameows.tentorium.config.serializable.SpleefConfig;
 import net.sylviameows.tentorium.gui.ffa.KitSelectionGUI;
 import net.sylviameows.tentorium.modes.ffa.kits.ArcherKit;
 import net.sylviameows.tentorium.modes.ffa.kits.Kit;
@@ -46,10 +45,10 @@ public class KitFFA extends FFA {
     }
 
     public Location spawn() {
-        return options().location();
+        return getOptions().location();
     }
     public Area lobby() {
-        return options().region();
+        return getOptions().region();
     }
 
     @Override
@@ -70,7 +69,7 @@ public class KitFFA extends FFA {
     }
 
     @Override
-    public ModeConfig options() {
+    public ModeConfig getOptions() {
         if (options != null) return options;
         var options = Config.get().getSerializable("ffa", ModeConfig.class);
         this.options = options;

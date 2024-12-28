@@ -12,16 +12,18 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.sylviameows.tentorium.TentoriumCore;
 import net.sylviameows.tentorium.config.Config;
-import net.sylviameows.tentorium.config.serializable.ModeConfig;
 import net.sylviameows.tentorium.config.serializable.SpleefConfig;
+import net.sylviameows.tentorium.config.serializable.spleef.TNTFloors;
 import net.sylviameows.tentorium.utilities.Area;
-import net.sylviameows.tentorium.utilities.Palette;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TNTSpleef extends Spleef {
     private final Location SPAWN_LOCATION = new Location(Bukkit.getWorld("world"), -416.5, 49, -19.5, 90, 0);
@@ -86,7 +88,7 @@ public class TNTSpleef extends Spleef {
     }
 
     @Override
-    public ModeConfig options() {
+    public SpleefConfig getOptions() {
         if (options != null) return options;
         var options = Config.get().getSerializable("tntrun", SpleefConfig.class);
         this.options = options;
@@ -97,31 +99,30 @@ public class TNTSpleef extends Spleef {
     protected void refresh() {
         var world = BukkitAdapter.adapt(Bukkit.getWorld("world"));
         try (EditSession session = WorldEdit.getInstance().newEditSessionBuilder().world(world).limitUnlimited().build()) {
-            BlockType[] layers = {
-                    BlockType.REGISTRY.get("minecraft:red_concrete_powder"),
-                    BlockType.REGISTRY.get("minecraft:orange_concrete_powder"),
-                    BlockType.REGISTRY.get("minecraft:yellow_concrete_powder"),
-                    BlockType.REGISTRY.get("minecraft:lime_concrete_powder"),
-                    BlockType.REGISTRY.get("minecraft:light_blue_concrete_powder")
-            };
-            int gap = 3;
+            var floors = getOptions().floors();
+            List<BlockType> layers = new ArrayList<>();
 
-            int y = 46;
+            for (String material : ((TNTFloors) getOptions().floors()).layers()) {
+                layers.add(BlockType.REGISTRY.get(material));
+            }
+
+            int gap = floors.gap();
+            int y = floors.y();
 
             Mask mask = new BlockMaskBuilder().add(BlockType.REGISTRY.get("minecraft:air")).build(session);
-            for (int i = 0; i < layers.length; i++) {
+            for (int i = 0; i < layers.size(); i++) {
                 var block_region = new CuboidRegion(
-                        BlockVector3.at(-423, y, -32),
-                        BlockVector3.at(-447, y, -8)
+                        BlockVector3.at(floors.x1(), y, floors.z1()),
+                        BlockVector3.at(floors.x2(), y, floors.z2())
                 );
 
                 var tnt_region = new CuboidRegion(
-                        BlockVector3.at(-423, y-1, -32),
-                        BlockVector3.at(-447, y-1, -8)
+                        BlockVector3.at(floors.x1(), y-1, floors.z1()),
+                        BlockVector3.at(floors.x2(), y-1, floors.z2())
                 );
 
                 session.replaceBlocks(tnt_region, mask, BlockType.REGISTRY.get("minecraft:tnt"));
-                session.replaceBlocks(block_region, mask, layers[i]);
+                session.replaceBlocks(block_region, mask, layers.get(i));
                 y = y - gap - 2 /* adds the tnt and following block we set to make it not wrong or whatever */;
             }
         }

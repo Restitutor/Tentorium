@@ -19,6 +19,10 @@ public class TNTFloors extends FloorsConfig {
         this.layers = (List<String>) args.get("layers");
     }
 
+    public List<String> layers() {
+        return layers;
+    }
+
     @Override
     protected Map<String, Object> addLayers(Map<String, Object> start) {
         start.put("layers", layers);

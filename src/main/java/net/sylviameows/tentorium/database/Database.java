@@ -1,6 +1,7 @@
 package net.sylviameows.tentorium.database;
 
 import net.sylviameows.tentorium.TentoriumCore;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.sql.Connection;
@@ -181,6 +182,30 @@ public abstract class Database {
         return value.get();
     }
 
+    public void reset() {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = getSQLConnection();
+            ps = conn.prepareStatement("DROP TABLE "+table+";");
+
+            ps.execute();
+        } catch (SQLException ex) {
+            core.getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(), ex);
+        } finally {
+            try {
+                if (ps != null)
+                    ps.close();
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException ex) {
+                core.getLogger().log(Level.SEVERE, Errors.sqlConnectionClose(), ex);
+            }
+        }
+
+        load();
+        Bukkit.getOnlinePlayers().forEach(this::createPlayer);
+    }
 
     public void close(PreparedStatement ps,ResultSet rs){
         try {

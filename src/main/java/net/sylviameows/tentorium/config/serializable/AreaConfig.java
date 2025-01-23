@@ -6,12 +6,13 @@ import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class AreaConfig implements ConfigurationSerializable {
+    public static String ALIAS = "area";
+
     protected World world;
     protected Location location;
 
@@ -27,6 +28,7 @@ public class AreaConfig implements ConfigurationSerializable {
     @Override
     public @NotNull Map<String, Object> serialize() {
         Map<String, Object> data = new HashMap<>();
+        data.put("==", ALIAS);
 
         String world = this.world.getName();
         double[] coords = {
@@ -51,8 +53,9 @@ public class AreaConfig implements ConfigurationSerializable {
             return null;
         }).toList();
 
+        world = Bukkit.getWorld((String) args.get("world"));
         location = new Location(
-                Bukkit.getWorld((String) args.get("world")),
+                world,
                 coords.get(0),
                 coords.get(1),
                 coords.get(2),

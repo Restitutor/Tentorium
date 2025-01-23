@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class Area implements ConfigurationSerializable {
+    public static String ALIAS = "region";
+
     private Location a;
     private Location b;
 
@@ -90,6 +92,8 @@ public class Area implements ConfigurationSerializable {
 
         data.put("a", new int[]{a.getBlockX(), a.getBlockY(), a.getBlockZ()});
         data.put("b", new int[]{b.getBlockX(), b.getBlockY(), b.getBlockZ()});
+
+        data.put("==", ALIAS);
 
         return data;
     }

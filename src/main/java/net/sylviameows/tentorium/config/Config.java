@@ -18,14 +18,14 @@ public class Config {
     public Config(TentoriumCore core) {
         this.core = core;
 
-        ConfigurationSerialization.registerClass(Area.class, "region");
+        ConfigurationSerialization.registerClass(Area.class, Area.ALIAS);
 
-        ConfigurationSerialization.registerClass(AreaConfig.class, "area");
-        ConfigurationSerialization.registerClass(ModeConfig.class, "mode");
-        ConfigurationSerialization.registerClass(SpleefConfig.class, "spleef_mode");
+        ConfigurationSerialization.registerClass(AreaConfig.class, AreaConfig.ALIAS);
+        ConfigurationSerialization.registerClass(ModeConfig.class, ModeConfig.ALIAS);
+        ConfigurationSerialization.registerClass(SpleefConfig.class, SpleefConfig.ALIAS);
 
-        ConfigurationSerialization.registerClass(ClassicFloors.class, "classic_floors");
-        ConfigurationSerialization.registerClass(TNTFloors.class, "tnt_floors");
+        ConfigurationSerialization.registerClass(ClassicFloors.class, ClassicFloors.ALIAS);
+        ConfigurationSerialization.registerClass(TNTFloors.class, TNTFloors.ALIAS);
 
         core.saveResource("config.yml", false);
         Config.config = core.getConfig();

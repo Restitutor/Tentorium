@@ -7,6 +7,7 @@ import net.kyori.adventure.text.format.TextColor;
  */
 public interface Palette {
     TextColor WHITE = TextColor.color(0xFFFFFF); // default
+    TextColor MEDAL_SILVER = TextColor.color(0xD7D7D7);
     TextColor GRAY = TextColor.color(0xAAAAAA); // default
     TextColor DARK_GRAY = TextColor.color(0x555555); // default
     TextColor BLACK = TextColor.color(0x000000); // default
@@ -15,7 +16,11 @@ public interface Palette {
     TextColor RED = TextColor.color(0xFF0000);
     TextColor RED_LIGHT = TextColor.color(0xFF5555); // default
 
+    TextColor MEDAL_BRONZE = TextColor.color(0xA77044);
+
     TextColor GOLD = TextColor.color(0xFFAA00); // default
+
+    TextColor MEDAL_GOLD = TextColor.color(0xFEE101);
 
     TextColor YELLOW = TextColor.color(0xFFFF00); // default
 

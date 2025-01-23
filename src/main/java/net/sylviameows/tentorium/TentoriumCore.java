@@ -6,6 +6,8 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.sylviameows.tentorium.commands.*;
 import net.sylviameows.tentorium.config.Config;
 import net.sylviameows.tentorium.database.SQLite;
+import net.sylviameows.tentorium.leaderboards.LeaderboardManager;
+import net.sylviameows.tentorium.leaderboards.LeaderboardTask;
 import net.sylviameows.tentorium.modes.Mode;
 import net.sylviameows.tentorium.modes.Parkour;
 import net.sylviameows.tentorium.modes.ffa.KitFFA;
@@ -25,11 +27,16 @@ public class TentoriumCore extends JavaPlugin {
     private static TentoriumCore INSTANCE;
     private static Config CONFIG;
 
+    private static LeaderboardManager LEADERBOARD;
+
     public static ComponentLogger logger() {
         return LOGGER;
     }
     public static TentoriumCore instance() {
         return INSTANCE;
+    }
+    public static LeaderboardManager leaderboard() {
+        return LEADERBOARD;
     }
 
     public static NamespacedKey identififer(String value) {
@@ -86,8 +93,6 @@ public class TentoriumCore extends JavaPlugin {
             modes_loaded++;
         }
 
-        logger().info("Loaded "+modes_loaded+" gamemodes(s)!");
-
         var lem = this.getLifecycleManager();
         lem.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
             final Commands commands = event.registrar();
@@ -100,6 +105,7 @@ public class TentoriumCore extends JavaPlugin {
             commands.register("select", "select a map", new SelectCommand());
 
             commands.register("leaderboard", "view leaderboards for each game", new LeaderboardCommand());
+            commands.register("setleaderboardpos", "set a leaderboard in physical space", List.of("slp"), new SetLeaderboardCommand());
             commands.register("stats", "view stats for each game", new StatsCommand());
 
             for (Mode mode : modes) {
@@ -108,6 +114,10 @@ public class TentoriumCore extends JavaPlugin {
         });
 
         CONFIG = new Config(this);
+
+        logger().info("Initializing leaderboards...");
+        LEADERBOARD = new LeaderboardManager(this);
+        logger().info("Leaderboards initialized!");
 
         logger().info("Plugin ready for use!");
     }

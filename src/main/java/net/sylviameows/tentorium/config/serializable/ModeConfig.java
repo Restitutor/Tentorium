@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 public class ModeConfig extends AreaConfig {
+    public static String ALIAS = "mode";
+
     protected int void_level;
     protected Area spawn_area;
 
@@ -42,6 +44,7 @@ public class ModeConfig extends AreaConfig {
     @Override
     public @NotNull Map<String, Object> serialize() {
         var data = super.serialize();
+        data.put("==", ALIAS);
 
         data.put("void_level", void_level);
         data.put("region", spawn_area);

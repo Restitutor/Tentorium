@@ -28,7 +28,7 @@ public class LeaderboardTask extends BukkitRunnable {
             var time = new Date();
             calendar.setTime(time);
 
-            TentoriumCore.logger().info(calendar.get(Calendar.DAY_OF_WEEK)+" "+calendar.get(Calendar.HOUR_OF_DAY));
+//            TentoriumCore.logger().info(calendar.get(Calendar.DAY_OF_WEEK)+" "+calendar.get(Calendar.HOUR_OF_DAY));
 
             int day = calendar.get(Calendar.DAY_OF_WEEK);
             if (day == Calendar.THURSDAY) {

@@ -5,6 +5,7 @@ import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
 import net.sylviameows.tentorium.TentoriumCore;
 import net.sylviameows.tentorium.config.serializable.SpleefConfig;
@@ -118,7 +119,11 @@ public abstract class Spleef extends Mode implements TrackedScore, ConfigurableM
     }
 
     protected void setupPlayer(Player player) {}
-    protected void winner(Player player) {}
+    protected void winner(Player player) {
+        var name = PlainTextComponentSerializer.plainText().serialize(name());
+        player.sendMessage(Component.text("(+1 "+ name.toLowerCase() +" win)").color(Palette.GRAY));
+        player.playSound(Sound.sound(Key.key("minecraft", "entity.arrow.hit_player"), Sound.Source.PLAYER, 0.3f, 0.9f));
+    }
 
     protected void countdown(int seconds_left) {
         if (seconds_left <= 0) {

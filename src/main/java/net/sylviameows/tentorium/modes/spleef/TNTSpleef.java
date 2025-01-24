@@ -137,6 +137,8 @@ public class TNTSpleef extends Spleef {
 
     @Override
     protected void winner(Player player) {
+        super.winner(player);
+
         var uuid = player.getUniqueId().toString();
         var score = database().fetchInt(uuid, "tnt_wins");
         database().update(uuid, "tnt_wins", score+1);

@@ -8,11 +8,13 @@ import net.sylviameows.tentorium.config.Config;
 import net.sylviameows.tentorium.modes.Mode;
 import net.sylviameows.tentorium.modes.TrackedScore;
 import net.sylviameows.tentorium.utilities.Palette;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.TextDisplay;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -51,6 +53,14 @@ public class LeaderboardManager {
 
     public LeaderboardManager(TentoriumCore core) {
         task = new LeaderboardTask(core);
+
+        Bukkit.getWorlds().forEach(world -> {
+            world.getEntitiesByClass(TextDisplay.class).forEach(entity -> {
+                if (entity.getPersistentDataContainer().has(TentoriumCore.identififer("leaderboard"))) {
+                    entity.remove();
+                }
+            });
+        });
 
         TentoriumCore.modes.forEach((string, mode) -> {
             if (!(mode instanceof TrackedScore)) return;
@@ -96,6 +106,8 @@ public class LeaderboardManager {
         display.setBillboard(Display.Billboard.VERTICAL);
 
         display.text(text(mode));
+
+        display.getPersistentDataContainer().set(TentoriumCore.identififer("leaderboard"), PersistentDataType.BOOLEAN, true);
 
         return display;
     }

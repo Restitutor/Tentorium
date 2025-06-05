@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.17"
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
@@ -20,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21.5-R0.1-SNAPSHOT")
 
     implementation(platform("com.intellectualsites.bom:bom-newest:1.51")) // Ref: https://github.com/IntellectualSites/bom
     compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core")
@@ -34,7 +35,7 @@ tasks {
     }
 
     runServer {
-        minecraftVersion("1.21.3")
+        minecraftVersion("1.21.5")
     }
 
     processResources {
